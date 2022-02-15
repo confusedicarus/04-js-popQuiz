@@ -1,0 +1,20 @@
+.timer {
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+.card {
+  background-color: blue;
+  width: 80vw;
+  height: 80vh;
+  display: block;
+}
+.question-title {
+  text-align: center;
+  width: 80vw;
+}
+.questions {
+  background-color: aqua;
+}
