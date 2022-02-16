@@ -2,6 +2,7 @@
 var timeEl = document.querySelector(".time");
 var card = document.querySelector(".card");
 var startBtn = document.querySelector(".startBtn");
+var resetBtn = document.querySelector(".resetBtn");
 var formSelector = document.querySelector("#FormControlSelect");
 var questionTitle = document.querySelector(".question-title");
 var secondsLeft = 60;
@@ -11,7 +12,8 @@ var initialArr = JSON.parse(localStorage.getItem("initial")) || [];
 
 var questionHeader = [
   {
-    question: "Which of these quotes does not belong to Albert Camus?",
+    question:
+      "Which of these quotes does not belong to the author Albert Camus?",
     answers: [
       "A: You will never be happy if you continue to search for what happiness consists of. You will never live if you are looking for the meaning of life.",
       "B: In the depth of winter, I finally learned that within me there lay an invincible summer.",
@@ -51,7 +53,8 @@ var questionHeader = [
     correctAnswer: "D",
   },
   {
-    question: "Which of these quotes does not belong to Edgar Allan Poe?",
+    question:
+      "Which of these quotes does not belong to author Edgar Allan Poe?",
     answers: [
       "A: I became insane, with long intervals of horrible sanity.",
       "B: All that we see or seem is but a dream within a dream.",
@@ -61,7 +64,8 @@ var questionHeader = [
     correctAnswer: "C",
   },
   {
-    question: "Which of these quotes does not belong to Hunter S. Thompson?",
+    question:
+      "Which of these quotes does not belong to author Hunter S. Thompson?",
     answers: [
       "A: Sex without love is as hollow and ridiculous as love without sex.",
       "B: A man who procrastinates in his choosing will inevitably have his choice made for him by circumstance.",
@@ -74,8 +78,8 @@ var questionHeader = [
 
 // function to move to the next question
 function nextQuestion() {
- 
   formSelector.textContent = "";
+  // questionTitle.textContent = questionHeader[i].question[i];
 
   for (var i = 0; i < questionHeader[qIndex].answers.length; i++) {
     var options = document.createElement("option");
@@ -88,15 +92,13 @@ function nextQuestion() {
 function checkAnswer(event) {
   var chosenAnswer = event.target.innerHTML;
   var splitAnswer = chosenAnswer.split(":")[0];
-  // console.log(chosenAnswer);
-  // console.log(chosenAnswer.split(":"));
-  // console.log(splitAnswer);
+
 
   if (splitAnswer == questionHeader[qIndex].correctAnswer) {
-    secondsLeft + 10;
+    secondsLeft += 20;
     score++;
   } else if (splitAnswer !== questionHeader[qIndex].correctAnswer) {
-    secondsLeft - 10;
+    secondsLeft -= 20;
     score--;
   }
 
@@ -113,17 +115,16 @@ function startQuiz() {
     secondsLeft--;
     timeEl.textContent = secondsLeft;
     console.log(qIndex, questionHeader.length);
-    if (secondsLeft <= 0) {
+    if (secondsLeft <= 0 || qIndex >= questionHeader.length) {
       clearInterval();
       endQuiz();
-    } else if (qIndex >= questionHeader.length) {
-      return endQuiz();
     }
   }, 1000);
   nextQuestion();
 }
 
 function endQuiz() {
+  resetBtn.style.display = "block";
   var initial = window.prompt("Please enter your initials");
   initialArr.push({ initial: initial, score: score });
   localStorage.setItem("initial", JSON.stringify(initialArr));
