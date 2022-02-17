@@ -127,13 +127,17 @@ function endQuiz() {
   initialArr.push({ initial: initial, score: score });
   localStorage.setItem("initial", JSON.stringify(initialArr));
   sendMessage();
-  return location.reload;
 }
+
 function sendMessage() {
-  for (var i = 0; i < highScoresEl.length, i++) {
-  var highScoresEl = document.createElement("p");
-  highScoresEl.textContent = localStorage.getItem(initialArr);
-  scoresEl.appendChild(highScoresEl);
+  for (var i = 0; i < initialArr.length; i++) {
+    var highScoresEl = document.createElement("p");
+    highScoresEl.textContent = initialArr[i].initial + initialArr[i].score;
+    console.log(highScoresEl);
+    scoresEl.appendChild(highScoresEl);
   }
 }
 startBtn.addEventListener("click", startQuiz);
+resetBtn.addEventListener("click", function () {
+  return location.reload();
+});
