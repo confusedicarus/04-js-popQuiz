@@ -5,6 +5,8 @@ var startBtn = document.querySelector(".startBtn");
 var resetBtn = document.querySelector(".resetBtn");
 var formSelector = document.querySelector("#FormControlSelect");
 var questionTitle = document.querySelector(".question-title");
+var scoresEl = document.querySelector(".scores");
+var userInput = document.querySelector(".user-input");
 var secondsLeft = 60;
 var qIndex = 0;
 var score = 0;
@@ -75,24 +77,19 @@ var questionHeader = [
     correctAnswer: "D",
   },
 ];
-
-// function to move to the next question
 function nextQuestion() {
   formSelector.textContent = "";
-  // questionTitle.textContent = questionHeader[i].question[i];
-
   for (var i = 0; i < questionHeader[qIndex].answers.length; i++) {
     var options = document.createElement("option");
     options.textContent = questionHeader[qIndex].answers[i];
+    questionTitle.textContent = questionHeader[qIndex].question;
     formSelector.appendChild(options);
     options.onclick = checkAnswer;
   }
 }
-
 function checkAnswer(event) {
   var chosenAnswer = event.target.innerHTML;
   var splitAnswer = chosenAnswer.split(":")[0];
-
 
   if (splitAnswer == questionHeader[qIndex].correctAnswer) {
     secondsLeft += 20;
@@ -103,7 +100,7 @@ function checkAnswer(event) {
   }
 
   if (qIndex == questionHeader.length - 1) {
-    endQuiz();
+    return endQuiz();
   }
   qIndex++;
   nextQuestion();
@@ -111,23 +108,32 @@ function checkAnswer(event) {
 function startQuiz() {
   //timer function
   startBtn.style.display = "none";
-  var quizTimer = setInterval(() => {
-    secondsLeft--;
-    timeEl.textContent = secondsLeft;
-    console.log(qIndex, questionHeader.length);
-    if (secondsLeft <= 0 || qIndex >= questionHeader.length) {
-      clearInterval();
-      endQuiz();
-    }
-  }, 1000);
+  function setTime() {
+    var quizTimer = setInterval(function () {
+      secondsLeft--;
+      timeEl.textContent = secondsLeft;
+      if (secondsLeft <= 0 || qIndex >= questionHeader.length) {
+        clearInterval(quizTimer);
+        return endQuiz();
+      }
+    }, 1000);
+  }
+  setTime();
   nextQuestion();
 }
-
 function endQuiz() {
   resetBtn.style.display = "block";
   var initial = window.prompt("Please enter your initials");
   initialArr.push({ initial: initial, score: score });
   localStorage.setItem("initial", JSON.stringify(initialArr));
+  sendMessage();
+  return location.reload;
 }
-
+function sendMessage() {
+  for (var i = 0; i < highScoresEl.length, i++) {
+  var highScoresEl = document.createElement("p");
+  highScoresEl.textContent = localStorage.getItem(initialArr);
+  scoresEl.appendChild(highScoresEl);
+  }
+}
 startBtn.addEventListener("click", startQuiz);
